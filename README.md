@@ -1,17 +1,19 @@
 # PDF RAG Assistant 📚
 
-A Retrieval-Augmented Generation (RAG) system that lets you ask natural language questions about PDF documents. Built with FAISS for local vector storage and Google Gemini as the LLM — no cloud vector database required.
+A Retrieval-Augmented Generation (RAG) system that lets you ask natural language questions about PDF documents. Built with LlamaIndex and LangChain, using FAISS for local vector storage and a local Ollama llama3.2 model as the LLM — no cloud API or vector database required. An optional Pinecone-based ingestion pipeline is also included for cloud vector storage.
 
 ---
 
 ## What it does
 
 - Ingests multiple PDF files and indexes them locally using FAISS
-- Answers natural language questions about the PDFs using Google Gemini
+- Answers natural language questions about the PDFs using a local Ollama llama3.2 model — no API key required
 - Supports multi-document search across all indexed papers
-- Handles API rate limits with automatic retry logic
-- Provides a clean Streamlit chat interface with source references
-- Includes an optional Pinecone-based ingestion pipeline for cloud storage
+- Provides a clean Streamlit chat interface with an in-app "Process PDFs" button to trigger ingestion without touching the terminal
+- Includes retry logic with progressive backoff for rate limit errors (carried over from an earlier Gemini-based version)
+- Includes an optional Pinecone-based ingestion pipeline for cloud vector storage
+
+
 
 ---
 
