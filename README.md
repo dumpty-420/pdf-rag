@@ -54,7 +54,7 @@ pdf-rag/
 The main entry point — runs the Streamlit chat interface. Handles user input, displays conversation history, calls the RAG engine to generate answers, and shows source references for each response. This is the file you run to start the app.
 
 ### `ingestion.py`
-Responsible for loading PDFs and building the local FAISS vector index. It reads all PDF files from the project directory, splits them into chunks, generates embeddings using HuggingFace models, and saves the index to the `rag_files/` folder. Run this once before starting the app to prepare the index.
+Responsible for loading PDFs and building a local FAISS vector index using LlamaIndex. It reads all PDF files from the rag_files/ folder page by page using pypdf, splits them into chunks via SentenceSplitter (chunk size 128, overlap 50), generates embeddings using the BAAI/bge-small-en-v1.5 HuggingFace model (384 dimensions), and inserts documents in batches of 5 with rate-limiting delays. The final index is saved to the storage_index/ folder. Run this once before starting the app to prepare the index.
 
 ### `ingestion_pinecone.py`
 An alternative ingestion pipeline that stores embeddings in Pinecone (cloud) instead of FAISS (local). Use this if you prefer cloud-based vector storage. Requires a `PINECONE_API_KEY` in your `.env` file.
