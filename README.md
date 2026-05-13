@@ -146,10 +146,11 @@ streamlit run app.py
 
 ## How It Works
 
-1. **Ingestion** — PDFs are loaded, split into chunks, embedded using HuggingFace models, and stored locally in a FAISS index
-2. **Query** — When you ask a question, it is embedded and matched against the FAISS index to retrieve the most relevant chunks
-3. **Generation** — The retrieved chunks are passed to Google Gemini as context, which generates a grounded, cited answer
-4. **Rate Limiting** — Automatic retry with exponential backoff handles Gemini API quota limits gracefully
+1. Ingestion — PDFs from rag_files/ are loaded page by page using pypdf, split into chunks via SentenceSplitter (chunk size 128, overlap 50), embedded using BAAI/bge-small-en-v1.5 (HuggingFace), and stored in a local FAISS index under storage_index/
+2. Query — When you ask a question, it is embedded with the same HuggingFace model and matched against the FAISS index to retrieve the top 5 most relevant chunks
+3. Generation — The retrieved chunks are passed as context to a local Ollama llama3.2 model, which generates a grounded answer strictly based on the PDF content
+4. Rate Limiting — Retry logic with progressive backoff (10s, 20s, 30s, up to 3 attempts) is present in app.py for API quota errors, though it is effectively unused since the active pipeline runs fully locally via Ollama
+
 
 ---
 
