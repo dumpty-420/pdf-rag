@@ -60,7 +60,7 @@ Responsible for loading PDFs and building a local FAISS vector index using Llama
 An alternative ingestion pipeline that stores embeddings in Pinecone (cloud) instead of FAISS (local). Use this if you prefer cloud-based vector storage. Requires a `PINECONE_API_KEY` in your `.env` file.
 
 ### `prompt.py`
-Contains the prompt templates used to instruct the LLM. Defines how the retrieved context and user question are formatted before being sent to Google Gemini. Keeping prompts in a separate file makes them easy to tweak without touching the core logic.
+Contains two prompt templates used by the RAG pipeline. QA_PROMPT is a ChatPromptTemplate that instructs the LLM to answer strictly based on retrieved PDF context, with explicit rules against hallucination and repetition, plus a few-shot example for guidance. QUERY_GEN_PROMPT is a PromptTemplate for multi-query retrieval — it rewrites the user's question into 3 alternative versions to improve vector search coverage. Both prompts use langchain_core and are LLM-agnostic. The file also contains several older commented-out prompt variants left over from experimentation.
 
 ### `query_engine.py`
 Loads the saved FAISS index from `rag_files/` and builds the LangChain QA chain. Acts as the bridge between the stored index and the RAG engine — it sets up the retriever and connects it to the LLM for answering questions.
